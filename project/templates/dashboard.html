@@ -1,0 +1,79 @@
+{% extends 'main.html' %}
+
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+{% for message in messages %}
+<div class="alert mt-3 alert-danger alert-dismissible fade show" role="alert">
+    {{ message }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endfor %}
+   <div class="saves">
+      <h3>Saved Shelters</h3>
+      <div class="cards" style="margin:auto;"></div>
+    {% for save in savedShelters %}
+      
+    <div class="saveCard" style="width: 18rem; background-color: white; color: #62929E; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); margin: 20px;  display: inline-block; vertical-align: top;">
+         <div class="card-body">
+         <h5 class="card-title">{{save.Shelter.name}}</h5>
+         <h6 class="card-subtitle mb-2 text-muted"> {{save.Shelter.vacancies}} vacancies</h6>
+         <p class="card-text">{{save.Shelter.additional_info}}</p>
+         <a href="{{save.Shelter.email}}" class="card-link">{{save.Shelter.email}}</a>
+         <p class="card-text">{{save.Shelter.phone}}</p>
+         <p class="card-text">{{save.Shelter.address}}</p>
+         <form action="{% url 'unsave' %}" method="get">
+            <input type="hidden" value="{{save.Shelter.address}}" name="unsave">
+            <button type="submit" class="btn btn-danger">unsave</button>
+         </form>
+         </div>
+      </div>
+      
+    {% endfor %} 
+   </div>
+   </div>
+   
+   <div class="shelters">
+      <h3>Manage Your Shelters</h3>
+      <div class="cards" style="margin:auto;">
+    {% for shelter in shelters %}
+      <div class="shelterCard" style="width: 18rem; background-color: #393D3F; color: white; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); margin: 20px;  display: inline-block; vertical-align: top;">
+         <div class="card-body">
+         <h5 class="card-title">{{shelter.name}}</h5>
+         <form action="{% url 'changeVacancy' %}" method="get">
+            <input type="hidden" value="{{shelter.address}}" name="shelter">
+            <input type="submit" class="btn btn-danger" value="-" name="operation">
+            <p class="card-text" style="display: inline-block;">{{shelter.vacancies}} vacancies</p>
+           <input type="submit" class="btn btn-success" value="+" name="operation">
+         </form>
+         
+         </div>
+      </div>
+       
+       
+       <br>
+       <br>
+    {% endfor %}
+   </div>
+   </div>
+
+   
+   
+   <div class="donations">
+      <h3>Manage Your Donations</h3>
+    {% for donation in donations %}
+      <div class="donationCard" style="width: 18rem; background-color: #C6C5B9; color: #546A7B; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); margin: 20px;  display: inline-block; vertical-align: top;">
+         <div class="card-body">
+         <h5 class="card-title"> {{donation.item}}</h5>
+         <p class="card-text">condition/expiration date: {{donation.condition}}</p>
+         <p class="card-text">pickup address: {{donation.address}}</p>
+         <p class="card-text">pickup time: {{donation.time_range}}</p>
+         <form action="{% url 'donated' %}" method="get">
+            <input type="hidden" value="{{donation.id}}" name="id">
+            <button type="submit" class="btn btn-success">donated</button>
+        </form>
+         </div>
+      </div>
+    {% endfor %}
+   </div>
+    
+{% endblock %}
